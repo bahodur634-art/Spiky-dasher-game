@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Spiky Dasher Game</title>
+  <!-- Мобильные метатеги -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#111111">
+  
+  <!-- PWA манифест -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <!-- Мобильные кнопки управления -->
+  <div id="mobile-controls">
+    <div class="control-left">
+      <button id="left-btn" class="control-btn">←</button>
+      <button id="right-btn" class="control-btn">→</button>
+    </div>
+    <div class="control-right">
+      <button id="jump-btn" class="control-btn jump-btn">↑</button>
+    </div>
+  </div>
+
+  <!-- Оригинальное игровое поле -->
+  <div id='game_console'>
+    <div id='player2'></div>
+    <div id='game_alert'></div>
+    <div id='deaths_counter'></div>
+    <div id='time_counter'></div>
+  </div>
+  
+  <script src="./script.js"></script>
+  
+  <!-- Минимальный PWA код -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>
