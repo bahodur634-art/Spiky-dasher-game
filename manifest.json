@@ -1,11 +1,14 @@
 {
   "name": "Spiky Dasher Game",
   "short_name": "SpikyDasher",
-  "description": "Mobile platformer game",
-  "start_url": "./",
+  "description": "A challenging platformer game with mobile controls",
+  "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#111111",
   "theme_color": "#111111",
+  "orientation": "landscape-primary",
+  "categories": ["games", "entertainment"],
   "icons": [
     {
       "src": "icons/icon-192.png",
