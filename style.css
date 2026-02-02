@@ -1,5 +1,9 @@
-/* ВСЕ ОРИГИНАЛЬНЫЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ */
-
+/*
+  Changes:
+  - Made layout responsive and mobile-friendly.
+  - Added styles for on-screen mobile controls and prevented touch scroll/zoom.
+  - Kept original visual style with minimal changes.
+*/
 :root {
   --root-clr: dimgray;
   --tile-line-height: 30px;
@@ -17,19 +21,22 @@ html,
 body {
   min-width: 100vw;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* prevent scrolling */
   margin: 0;
   display: grid;
   place-items: center;
   background: #111;
-  /* Добавляем для мобильных */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  touch-action: none; /* prevent touch from triggering scroll/zoom gestures */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #game_console {
-  width: 1000px;
-  height: tile_size * rows + 'px'; /* Будет установлено в JS */
+  width: 100%;
+  max-width: 1000px;
+  /* make responsive; JS will compute tile size based on actual size */
+  aspect-ratio: 16 / 9;
   position: relative;
   background:
     linear-gradient(to bottom, rgba(0, 0, 0, .65), rgba(0, 0, 0, 1)),
@@ -41,6 +48,18 @@ body {
   user-select: none;
   box-shadow:
     0 20px 20px black;
+  touch-action: none; /* prevent touch gestures inside the game */
+}
+
+/* On small screens make the console full-viewport for an immersive mobile experience */
+@media (max-width: 600px) {
+  #game_console {
+    width: 100vw;
+    height: 100vh; /* allow height to be full viewport */
+    max-width: none;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
 }
 
 #deaths_counter,
@@ -113,7 +132,7 @@ h2 {
     conic-gradient(at 50% 0%, transparent 0deg 153deg, var(--root-clr) 155deg 195deg, var(--root-clr) 197deg 205deg, transparent 207deg 360deg);
 }
 
-.spleft {
+.sleft {
   transform: rotate(-90deg);
 }
 
@@ -153,7 +172,6 @@ h2 {
     transform: scale(1.1);
   }
 }
-
 
 #player,
 #player:after {
@@ -305,7 +323,6 @@ h2 {
   transform: skewX(-10deg);
 }
 
-
 .trailBall {
   position: absolute;
   width: 3px;
@@ -325,73 +342,43 @@ h2 {
   }
 }
 
-/* ДОБАВЛЯЕМ ТОЛЬКО СТИЛИ ДЛЯ МОБИЛЬНЫХ КНОПОК */
-#mobile-controls {
+/* Mobile controls */
+#mobile_controls {
   position: fixed;
-  bottom: 20px;
   left: 0;
   right: 0;
+  bottom: 18px;
   display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 10000;
-  display: none; /* По умолчанию скрыто, показывается на мобильных */
-}
-
-.control-left, .control-right {
-  display: flex;
-  gap: 15px;
-}
-
-.control-btn {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
-  border: 3px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
+  gap: 12px;
+  z-index: 100000;
+  pointer-events: none; /* pass pointer events down to buttons */
+}
+
+.mobile-btn {
+  pointer-events: auto;
+  -webkit-tap-highlight-color: rgba(255,255,255,0.1);
+  touch-action: none;
   user-select: none;
-  touch-action: manipulation;
-  transition: all 0.1s;
-  outline: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 22px;
+  display: inline-grid;
+  place-items: center;
+  backdrop-filter: blur(4px);
 }
 
-.control-btn:active {
-  transform: scale(0.9);
-  background: rgba(255, 255, 255, 0.3);
-  border-color: white;
+/* Larger buttons on very small screens */
+@media (max-width: 420px) {
+  .mobile-btn { width: 72px; height: 72px; font-size: 26px; }
+  #mobile_controls { gap: 16px; bottom: 12px; }
 }
 
-.jump-btn {
-  background: rgba(0, 100, 255, 0.7);
-}
-
-/* Показываем кнопки только на мобильных */
-@media (max-width: 768px) {
-  #mobile-controls {
-    display: flex;
-  }
-  
-  /* Делаем игровое поле адаптивным на мобильных */
-  #game_console {
-    width: 95vw !important;
-    max-width: 95vw;
-    height: auto !important;
-    transform-origin: top center;
-  }
-}
-
-/* Для очень маленьких экранов */
-@media (max-width: 480px) {
-  .control-btn {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-  }
+/* Hide controls on desktop by default but keep available for touch-enabled desktops */
+@media (min-width: 601px) {
+  #mobile_controls { display: none; }
 }

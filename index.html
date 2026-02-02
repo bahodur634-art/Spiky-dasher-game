@@ -1,50 +1,57 @@
 <!DOCTYPE html>
+<!--
+  Changes summary (index.html):
+  - Added mobile viewport meta and theme-color.
+  - Added link to manifest.json for PWA.
+  - Added on-screen mobile controls (kept outside #game_console to not break game DOM).
+  - Added safe service worker registration script (non-blocking, errors ignored).
+  - Kept original structure/IDs used by the game.
+-->
 <html lang="en">
 
 <head>
+  <!--
+    Changes: Added mobile viewport/meta tags, PWA manifest link and theme-color.
+    Added small, safe service worker registration script at the end of body (not inlined here).
+  -->
   <meta charset="UTF-8">
-  <title>Spiky Dasher Game</title>
-  <!-- Мобильные метатеги -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#111111">
-  
-  <!-- PWA манифест -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-  
+  <title>Spiky Dasher Game | @coding.stella</title>
+  <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-  <!-- Мобильные кнопки управления -->
-  <div id="mobile-controls">
-    <div class="control-left">
-      <button id="left-btn" class="control-btn">←</button>
-      <button id="right-btn" class="control-btn">→</button>
+  <!-- arrow keys to move and jump - on-screen controls added for mobile -->
+  <main>
+    <div id='game_console' role="application" aria-label="Spiky Dasher game">
+      <div id='player2'></div>
+      <div id='game_alert'></div>
+      <div id='deaths_counter'></div>
+      <div id='time_counter'></div>
     </div>
-    <div class="control-right">
-      <button id="jump-btn" class="control-btn jump-btn">↑</button>
-    </div>
-  </div>
 
-  <!-- Оригинальное игровое поле -->
-  <div id='game_console'>
-    <div id='player2'></div>
-    <div id='game_alert'></div>
-    <div id='deaths_counter'></div>
-    <div id='time_counter'></div>
-  </div>
-  
+    <!-- Mobile controls (pointer events & touch-safe). Kept outside game console to avoid breaking DOM used by game logic -->
+    <div id="mobile_controls" aria-hidden="false">
+      <button class="mobile-btn" id="btn_left" data-action="left" aria-label="Move left">◀</button>
+      <button class="mobile-btn" id="btn_jump" data-action="jump" aria-label="Jump">⬆</button>
+      <button class="mobile-btn" id="btn_right" data-action="right" aria-label="Move right">▶</button>
+    </div>
+  </main>
+
   <script src="./script.js"></script>
-  
-  <!-- Минимальный PWA код -->
   <script>
+    // Safe service worker registration for PWA/GitHub Pages
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+      window.addEventListener('load', function () {
+        navigator.serviceWorker && navigator.serviceWorker.register('./service-worker.js').catch(function (e) {
+          // ignore registration errors (file may not exist in a dev environment)
+          console.warn('SW registration failed:', e);
+        });
+      });
     }
   </script>
+
 </body>
 </html>
