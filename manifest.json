@@ -1,8 +1,8 @@
 {
   "short_name": "SpikyDasher",
-  "name": "Spiky Dasher",
+  "name": "Spiky-Dasher-game",
   "start_url": "./",
-  "display": "standalone",
+  "display": "portrait",
   "background_color": "#111111",
   "theme_color": "#111111",
   "description": "Pixel-style platformer",
@@ -18,4 +18,5 @@
       "type": "image/png"
     }
   ]
+
 }
